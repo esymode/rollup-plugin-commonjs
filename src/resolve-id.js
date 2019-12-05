@@ -1,5 +1,3 @@
-import { statSync } from 'fs';
-import { dirname, resolve, sep } from 'path';
 import {
 	getExternalProxyId,
 	getIdFromProxyId,
@@ -8,34 +6,7 @@ import {
 	PROXY_SUFFIX
 } from './helpers';
 
-function getCandidatesForExtension(resolved, extension) {
-	return [resolved + extension, resolved + `${sep}index${extension}`];
-}
-
-function getCandidates(resolved, extensions) {
-	return extensions.reduce(
-		(paths, extension) => paths.concat(getCandidatesForExtension(resolved, extension)),
-		[resolved]
-	);
-}
-
-export function getResolveId(extensions) {
-	function resolveExtensions(importee, importer) {
-		if (importee[0] !== '.' || !importer) return; // not our problem
-
-		const resolved = resolve(dirname(importer), importee);
-		const candidates = getCandidates(resolved, extensions);
-
-		for (let i = 0; i < candidates.length; i += 1) {
-			try {
-				const stats = statSync(candidates[i]);
-				if (stats.isFile()) return { id: candidates[i] };
-			} catch (err) {
-				/* noop */
-			}
-		}
-	}
-
+export function getResolveId() {
 	function resolveId(importee, importer) {
 		const isProxyModule = importee.endsWith(PROXY_SUFFIX);
 		if (isProxyModule) {
@@ -53,7 +24,15 @@ export function getResolveId(extensions) {
 
 		return this.resolve(importee, importer, { skipSelf: true }).then(resolved => {
 			if (!resolved) {
-				resolved = resolveExtensions(importee, importer);
+				// ESY: In this branch, the commonjs plugin seems to be handling the
+				// case in which no plugin resolves this ID. Since the commonjs plugin
+				// may still need to modify that ID, it does it's own resolution here,
+				// instead of letting rolup handle it (maybe?). Unfortunately, unless we
+				// mock out fs and path we can't allow that, so we'll instead always
+				// resolve IDs via other plugins, and assert if we fail to do so.
+
+				throw new Error(
+					`Invariant: no plugin handled resolveId(${importee}, ${importer})`);
 			}
 			if (isProxyModule) {
 				if (!resolved) {
