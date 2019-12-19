@@ -19,8 +19,19 @@ export default function commonjs(options = {}) {
 	const filter = createFilter(options.include, options.exclude);
 	const ignoreGlobal = options.ignoreGlobal;
 
-  const customNamedExports = {};
-  // ESY: Disable namedExports option to avoid fs.
+	const customNamedExports = {};
+	if (options.namedExports) {
+		Object.keys(options.namedExports).forEach(id => {
+			let resolveId = id;
+			let resolvedId;
+
+			// ESY: Assume namedExport key is an already-resolved path
+			// Note: customNamedExport's keys must be normalized file paths.
+			// resolve and nodeResolveSync both return normalized file paths
+			// so no additional normalization is necessary.
+			customNamedExports[resolvedId] = options.namedExports[id];
+    });
+  }
 
 	const esModulesWithoutDefaultExport = new Set();
 	const esModulesWithDefaultExport = new Set();
