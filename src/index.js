@@ -1,4 +1,4 @@
-import { extname, normalize } from './path-pollyfill';
+import { extname, normalize } from 'path';
 import { createFilter } from 'rollup-pluginutils';
 import { peerDependencies } from '../package.json';
 import {

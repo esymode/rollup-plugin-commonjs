@@ -1,4 +1,4 @@
-import { basename, dirname, extname, sep } from './path-pollyfill';
+import { basename, dirname, extname, sep } from 'path';
 import { makeLegalIdentifier } from 'rollup-pluginutils';
 
 export function getName(id) {
