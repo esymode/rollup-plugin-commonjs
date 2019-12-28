@@ -1,5 +1,5 @@
 import { basename, dirname, extname, sep } from './path-pollyfill';
-import { makeLegalIdentifier } from 'rollup-pluginutils';
+import { makeLegalIdentifier } from './pluginutils-polyfill';
 
 export function getName(id) {
 	const name = makeLegalIdentifier(basename(id, extname(id)));

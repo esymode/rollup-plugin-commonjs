@@ -1,5 +1,5 @@
 import { extname, normalize } from './path-pollyfill';
-import { createFilter } from 'rollup-pluginutils';
+import { createFilter } from './pluginutils-polyfill';
 import { peerDependencies } from '../package.json';
 import {
 	EXTERNAL_SUFFIX,

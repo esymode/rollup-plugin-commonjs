@@ -1,6 +1,6 @@
 import { walk } from 'estree-walker';
 import MagicString from 'magic-string';
-import { attachScopes, extractAssignedNames, makeLegalIdentifier } from 'rollup-pluginutils';
+import { attachScopes, extractAssignedNames, makeLegalIdentifier } from './pluginutils-polyfill';
 import { flatten, isFalsy, isReference, isTruthy } from './ast-utils.js';
 import { getProxyId, HELPERS_ID } from './helpers';
 import { getName } from './utils.js';
