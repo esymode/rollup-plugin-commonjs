@@ -1,5 +1,11 @@
 // Copied from https://github.com/browserify/path-browserify/blob/master/index.js
 
+function assertPath(path) {
+	if (typeof path !== 'string') {
+		throw new TypeError('Path must be a string. Received ' + JSON.stringify(path));
+	}
+}
+
 function basename(path, ext) {
 	if (ext !== undefined && typeof ext !== 'string')
 		throw new TypeError('"ext" argument must be a string');
